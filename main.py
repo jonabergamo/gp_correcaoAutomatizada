@@ -16,10 +16,6 @@ with open('resp.pkl', 'rb') as arquivo:
 respostasCorretas = ["1-B", "2-C", "3-A", "4-D", "5-B"]
 
 # Inicializa a captura de vídeo usando a câmera indexada como 3 (pode ser ajustado conforme necessário)
-video = cv2.VideoCapture(3)
-import cv2
-
-# Inicializa o vídeo
 video = cv2.VideoCapture(0)
 
 while True:
@@ -39,17 +35,20 @@ while True:
     ret, imgTh = cv2.threshold(imgGray, 70, 255, cv2.THRESH_BINARY_INV)
 
     # Desenha retângulo ao redor do gabarito
-    cv2.rectangle(imagem, (bbox[0], bbox[1]), (bbox[0] + bbox[2], bbox[1] + bbox[3]), (0, 255, 0), 3)
+    cv2.rectangle(imagem, (bbox[0], bbox[1]), (bbox[0] + bbox[2], bbox[1] + bbox[3]), (0, 255,0), 3)
 
     # Inicializa lista de respostas
     respostas = []
 
     # Itera sobre os campos
     for id, vg in enumerate(campos):
-        x, y, w, h = map(int, vg)
+        x = int(vg[0])
+        y = int(vg[1])
+        w = int(vg[2])
+        h = int(vg[3])
         
         # Desenha retângulo ao redor do campo no gabarito
-        cv2.rectangle(gabarito, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        cv2.rectangle(gabarito, (x, y), (x + w, y + h),(0,0,255),2)
         cv2.rectangle(imgTh, (x, y), (x + w, y + h), (255, 255, 255), 1)
 
         # Extrai região de interesse (ROI)
@@ -62,7 +61,7 @@ while True:
         percentual = round((pretos / tamanho) * 100, 2)
 
         # Se a porcentagem de pixels pretos for suficiente, marca como resposta
-        if percentual >= 15:
+        if percentual >=15:
             cv2.rectangle(gabarito, (x, y), (x + w, y + h), (255, 0, 0), 2)
             respostas.append(resp[id])
 
