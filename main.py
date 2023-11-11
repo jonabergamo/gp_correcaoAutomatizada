@@ -66,6 +66,22 @@ while True:
             cv2.rectangle(gabarito, (x, y), (x + w, y + h), (255, 0, 0), 2)
             respostas.append(resp[id])
 
-# Libera o vídeo
-video.release()
+#print(respostas)
+    erros = 0
+    acertos = 0
+    if len(respostas)==len(respostasCorretas):
+        for num,res in enumerate(respostas):
+            if res == respostasCorretas[num]:
+                #print(f'{res} Verdadeiro, correto: {respostasCorretas[num]}')
+                acertos +=1
+            else:
+                #print(f'{res} Falso, correto: {respostasCorretas[num]}')
+                erros +=1
 
+        pontuacao = int(acertos / len(respostasCorretas) * 10)
+        cv2.putText(imagem,f'ACERTOS: {acertos}, PONTOS: {pontuacao}',(30,140),cv2.FONT_HERSHEY_SIMPLEX,1.2,(0,0,255),3)
+
+    cv2.imshow('img',imagem)
+    cv2.imshow('Gabarito', gabarito)
+    cv2.imshow('IMG TH', imgTh)
+    cv2.waitKey(1)
